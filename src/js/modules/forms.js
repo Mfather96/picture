@@ -1,3 +1,5 @@
+import { postData } from "../services/requests";
+
 const formsModule = () => {
 
     const forms = document.querySelectorAll('form'),
@@ -76,14 +78,6 @@ const formsModule = () => {
         uploadInputs.forEach(input => {
             input.previousElementSibling.textContent = '';
         })
-    }
-
-    async function postData(url, data) {
-        let res = await fetch(url, {
-            method: "POST",
-            body: data
-        })
-        return res.text();
     }
 };
 
