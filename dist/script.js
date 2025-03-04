@@ -101,6 +101,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkText__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkText */ "./src/js/modules/checkText.js");
 /* harmony import */ var _modules_showMore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMore */ "./src/js/modules/showMore.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+
 
 
 
@@ -116,7 +118,42 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_checkText__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   Object(_modules_checkText__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   Object(_modules_showMore__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
+  Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/calc.js":
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const calc = (size, material, options, promocode, result) => {
+  const sizeBlock = document.querySelector(size),
+    materialBlock = document.querySelector(material),
+    optionsBlock = document.querySelector(options),
+    promocodeBlock = document.querySelector(promocode),
+    resultBlock = document.querySelector(result);
+  function calcPrice() {
+    let sum = Math.round(+sizeBlock.value * +materialBlock.value + +optionsBlock.value);
+    if (!sizeBlock.value || !materialBlock.value) {
+      resultBlock.textContent = 'Для расчета нужно выбрать размер картины и материал картины';
+    } else if (promocodeBlock.value === 'IWANTPOPART') {
+      resultBlock.textContent = Math.round(sum * 0.7) + 'руб';
+    } else {
+      resultBlock.textContent = Math.round(sum) + 'руб';
+    }
+  }
+  sizeBlock.addEventListener('change', calcPrice);
+  materialBlock.addEventListener('change', calcPrice);
+  optionsBlock.addEventListener('change', calcPrice);
+  promocodeBlock.addEventListener('input', calcPrice);
+};
+/* harmony default export */ __webpack_exports__["default"] = (calc);
 
 /***/ }),
 
@@ -164,7 +201,8 @@ __webpack_require__.r(__webpack_exports__);
 const formsModule = () => {
   const forms = document.querySelectorAll('form'),
     inputs = document.querySelectorAll('input'),
-    uploadInputs = document.querySelectorAll('[name="upload"]');
+    uploadInputs = document.querySelectorAll('[name="upload"]'),
+    selects = document.querySelectorAll('select');
   const message = {
     loading: 'Загрузка...',
     success: 'Спасибо! Мы скоро с вами свяжемся',
@@ -194,6 +232,9 @@ const formsModule = () => {
       form.parentNode.appendChild(statusMessage);
       form.style.display = 'none';
       const formData = new FormData(form);
+      selects.forEach(select => {
+        formData.append(select.getAttribute('id'), select.value);
+      });
       Object(_services_requests__WEBPACK_IMPORTED_MODULE_0__["postData"])(api, formData).then(response => {
         console.log(api);
         console.log(response);
@@ -400,8 +441,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const showMore = (trigger, wrapper) => {
   const btn = document.querySelector(trigger);
-  btn.addEventListener('click', function () {
-    Object(_services_requests__WEBPACK_IMPORTED_MODULE_0__["getData"])('http://localhost:3000/styles').then(response => {
+  btn.addEventListener('click', async function () {
+    await Object(_services_requests__WEBPACK_IMPORTED_MODULE_0__["getData"])('http://localhost:3000/styles').then(response => {
       console.log(response);
       createCards(response);
     }).catch(e => {

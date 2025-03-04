@@ -4,7 +4,8 @@ const formsModule = () => {
 
     const forms = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
-          uploadInputs = document.querySelectorAll('[name="upload"]');
+          uploadInputs = document.querySelectorAll('[name="upload"]'),
+          selects = document.querySelectorAll('select')
 
     const message = {
         loading: 'Загрузка...',
@@ -47,10 +48,18 @@ const formsModule = () => {
             form.parentNode.appendChild(statusMessage);
             form.style.display = 'none';
             const formData = new FormData(form);
+            console.log(formData)
+
+            selects.forEach(select => {
+                formData.append(select.getAttribute('id'), select.value);
+            })
+
+            if (form.querySelector('[name="total-price"]')) {
+                formData.append('price', form.querySelector('[name="total-price"]').textContent)
+            }
 
             postData(api, formData)
                 .then(response => {
-                    console.log(api);
                     console.log(response);
                     statusText.textContent = message.success;
                     statusImg.src = message.ok;
