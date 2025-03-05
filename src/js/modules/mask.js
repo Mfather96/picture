@@ -45,7 +45,6 @@ const mask = (selector) => {
         } else {
             this.value = varib;
         }
-        console.log(this.value);
         
         if (event.type === 'blur') {
             if (this.value.length == 2) {

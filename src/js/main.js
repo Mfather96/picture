@@ -7,6 +7,7 @@ import showMore from "./modules/showMore";
 import calc from "./modules/calc";
 import filter from "./modules/filter";
 import pictureSize from "./modules/pictureSize";
+import accordeon from "./modules/accordeon";
 
 window.addEventListener('DOMContentLoaded', () => {
     modals();
@@ -15,11 +16,12 @@ window.addEventListener('DOMContentLoaded', () => {
     slider('.main-slider-item', 'vertical');
     formsModule();
     mask('[name="phone"]');
-    checkText('[name="name"]');
-    checkText('[name="message"]');
+    // checkText('[name="name"]');
+    // checkText('[name="message"]');
 
     showMore('.button-styles', '#styles .row');
     calc('#size', '#material', '#options', '.promocode', '.calc-price');
     filter();
     pictureSize('.sizes-block');
+    accordeon('.accordion-heading');
 })
