@@ -102,6 +102,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_checkText__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkText */ "./src/js/modules/checkText.js");
 /* harmony import */ var _modules_showMore__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMore */ "./src/js/modules/showMore.js");
 /* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
+/* harmony import */ var _modules_pictureSize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pictureSize */ "./src/js/modules/pictureSize.js");
+
+
 
 
 
@@ -119,6 +123,8 @@ window.addEventListener('DOMContentLoaded', () => {
   Object(_modules_checkText__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   Object(_modules_showMore__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
   Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
+  Object(_modules_filter__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  Object(_modules_pictureSize__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block');
 });
 
 /***/ }),
@@ -187,6 +193,55 @@ const checkText = selector => {
 
 /***/ }),
 
+/***/ "./src/js/modules/filter.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/filter.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const filter = () => {
+  const menu = document.querySelector('.portfolio-menu'),
+    menuItems = menu.querySelectorAll('li'),
+    wrapper = document.querySelector('.portfolio-wrapper'),
+    no = document.querySelector('.portfolio-no');
+  menuItems.forEach(item => {
+    item.addEventListener('click', e => {
+      const target = e.target;
+      if (target && target.tagName === 'LI') {
+        removeAll();
+        const activeClass = target.classList.value;
+        target.classList.add('active');
+        if (activeClass === 'grandmother' || activeClass === 'granddad') {
+          no.style.display = 'block';
+          no.classList.add('animated', 'fadeIn');
+          return;
+        }
+        wrapper.querySelectorAll('.' + activeClass).forEach(elem => {
+          elem.style.display = 'block';
+          elem.classList.add('animated', 'fadeIn');
+        });
+      }
+    });
+  });
+  function removeAll() {
+    menuItems.forEach(item => item.classList.remove('active'));
+    if (no) {
+      no.style.display = 'none';
+      no.classList.remove('animated', 'fadeIn');
+    }
+    wrapper.querySelectorAll('.portfolio-block.all').forEach(mark => {
+      mark.style.display = 'none';
+      mark.classList.remove('animated', 'fadeIn');
+    });
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (filter);
+
+/***/ }),
+
 /***/ "./src/js/modules/forms.js":
 /*!*********************************!*\
   !*** ./src/js/modules/forms.js ***!
@@ -232,11 +287,14 @@ const formsModule = () => {
       form.parentNode.appendChild(statusMessage);
       form.style.display = 'none';
       const formData = new FormData(form);
+      console.log(formData);
       selects.forEach(select => {
         formData.append(select.getAttribute('id'), select.value);
       });
+      if (form.querySelector('[name="total-price"]')) {
+        formData.append('price', form.querySelector('[name="total-price"]').textContent);
+      }
       Object(_services_requests__WEBPACK_IMPORTED_MODULE_0__["postData"])(api, formData).then(response => {
-        console.log(api);
         console.log(response);
         statusText.textContent = message.success;
         statusImg.src = message.ok;
@@ -425,6 +483,44 @@ const modals = () => {
   // showModalByTime('.popup-consultation', 4000);
 };
 /* harmony default export */ __webpack_exports__["default"] = (modals);
+
+/***/ }),
+
+/***/ "./src/js/modules/pictureSize.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/pictureSize.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const pictureSize = imgSelector => {
+  const blocks = document.querySelectorAll(imgSelector);
+  function showImg(block) {
+    const img = block.querySelector('img');
+    img.src = img.src.slice(0, -4) + '-1.png';
+    block.querySelectorAll('p:not(.sizes-hit)').forEach(p => {
+      p.style.display = 'none';
+    });
+  }
+  function hideImg(block) {
+    const img = block.querySelector('img');
+    img.src = img.src.slice(0, -6) + '.png';
+    block.querySelectorAll('p:not(.sizes-hit)').forEach(p => {
+      p.style.display = 'block';
+    });
+  }
+  blocks.forEach(block => {
+    block.addEventListener('mouseover', () => {
+      showImg(block);
+    });
+    block.addEventListener('mouseout', () => {
+      hideImg(block);
+    });
+  });
+};
+/* harmony default export */ __webpack_exports__["default"] = (pictureSize);
 
 /***/ }),
 
