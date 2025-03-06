@@ -899,14 +899,27 @@ h4 {
   margin-bottom: 4rem;
   margin-top: 2rem;
 }
+
+.often-questions .accordion-heading.active {
+  color: darkmagenta;
+}
 .often-questions .accordion-heading span {
   border-bottom: 2px dotted #333;
 }
 .often-questions .accordion-block {
-  margin-top: 1rem;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
   background-color: #f7e7e6;
-  padding: 3rem 4rem;
+  transition: all 0.2s ease-in;
 }
+.often-questions .accordion-block.active {
+  margin-top: 1rem;
+  padding: 3rem 4rem;
+  opacity: 1;
+  overflow: visible;
+}
+
 .often-questions .accordion-block:before {
   content: '';
   position: absolute;
@@ -1257,6 +1270,20 @@ h4 {
   border-radius: 4px;
   transform: translateX(-50%) !important;
   padding: 3rem 6rem 4rem 6rem;
+}
+
+.pageup {
+  opacity: 0;
+width: 26px ;
+height: 26px;
+position: fixed;
+bottom: 100px;
+right: 5%;
+z-index: 30;
+background-color: #fff;
+cursor: pointer;
+border: 1px solid white;
+  transition: 1s all;
 }
 @media (max-width: 1399px) {
   .paints {

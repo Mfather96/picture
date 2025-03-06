@@ -8,9 +8,11 @@ import calc from "./modules/calc";
 import filter from "./modules/filter";
 import pictureSize from "./modules/pictureSize";
 import accordeon from "./modules/accordeon";
+import burger from "./modules/burger";
+import scrolling from "./modules/scroll";
 
 window.addEventListener('DOMContentLoaded', () => {
-    modals();
+    modals()
 
     slider('.feedback-slider-item', '', '.main-prev-btn', '.main-next-btn');
     slider('.main-slider-item', 'vertical');
@@ -24,4 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
     filter();
     pictureSize('.sizes-block');
     accordeon('.accordion-heading');
+    burger('.burger-menu', '.burger');
+    scrolling();
 })
